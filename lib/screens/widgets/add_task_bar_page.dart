@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/constants/input_text_field.dart';
+import 'package:todo_app/controllers/task_controller.dart';
+import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/screens/theme.dart';
 import 'package:todo_app/screens/widgets/button.dart';
 
@@ -15,6 +18,8 @@ class AddTaskBarPage extends StatefulWidget {
 }
 
 class _AddTaskBarPageState extends State<AddTaskBarPage> {
+  final TaskController _taskController = Get.put(TaskController());
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
@@ -182,7 +187,7 @@ class _AddTaskBarPageState extends State<AddTaskBarPage> {
 
   _validateDate() {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      //add to database;
+      _addTaskToDataBase();
       Get.back();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar('Required', 'All fields are required',
@@ -192,6 +197,23 @@ class _AddTaskBarPageState extends State<AddTaskBarPage> {
           backgroundColor: const Color(0xff4e5ae8),
           icon: const Icon(Icons.warning_amber_rounded));
     }
+  }
+
+  _addTaskToDataBase() async {
+    int value = await _taskController.addTask(
+      task: Task(
+        note: _noteController.text,
+        title: _titleController.text,
+        date: DateFormat.yMd().format(_selectedDate),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _selectedColor,
+        isCompleted: 0,
+      ),
+    );
+    print('My ID is ' + '$value');
   }
 
   _colorPallete() {
