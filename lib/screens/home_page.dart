@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/constants/date_bar_slider.dart';
+import 'package:todo_app/constants/task_bar.dart';
 import 'package:todo_app/services/notifications_services.dart';
 import 'package:todo_app/services/theme_services.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,18 +26,23 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
-      body: const Center(
-        child: Text(
-          'ThemeData',
-          style: TextStyle(fontSize: 30),
-        ),
-      ),
-    );
+        backgroundColor: context.theme.dialogBackgroundColor,
+        appBar: _appBar(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            children: [
+              const TaskBar(),
+              const SizedBox(height: 16),
+              DateBarSlider(),
+            ],
+          ),
+        ));
   }
 
   _appBar() {
     return AppBar(
+      backgroundColor: context.theme.dialogBackgroundColor,
       leading: GestureDetector(
         onTap: () {
           ThemeService().switchTheme();
@@ -47,7 +54,11 @@ class _HomePageState extends State<HomePage> {
           );
           notifyHelper.scheduledNotification();
         },
-        child: const Icon(Icons.nightlight_round, size: 20),
+        child: Icon(
+          Get.isDarkMode ? Icons.wb_sunny_outlined : Icons.nightlight_outlined,
+          size: 20,
+          color: Get.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       actions: const [
         Icon(Icons.person, size: 20),

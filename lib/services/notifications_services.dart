@@ -96,6 +96,6 @@ class NotifyHelper {
 
   Future<void> onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) async {
-    Get.dialog(Text("Welcome to Flutter"));
+    Get.dialog(const Text("Welcome to Flutter"));
   }
 }
