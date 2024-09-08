@@ -34,7 +34,7 @@ class DBHelper {
     print('Inserting data to $_tableName');
     try {
       print(task!.toJson());
-      return await _database?.insert(_tableName, task!.toJson()) ?? 1;
+      return await _database?.insert(_tableName, task.toJson()) ?? 1;
     } catch (e) {
       print(e);
       return 0;
@@ -51,18 +51,23 @@ class DBHelper {
     }
   }
 
-  static Future<int> delete(int id) async {
-    // print('Deleting data from $_tableName with id ===> $id');
-    try {
-      return await _database!.delete(
-        _tableName,
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-    } catch (e) {
-      // print(e);
-      return 0;
-    }
+  // static Future<int> delete(int id) async {
+  //   // print('Deleting data from $_tableName with id ===> $id');
+  //   try {
+  //     return await _database!.delete(
+  //       _tableName,
+  //       where: 'id = ?',
+  //       whereArgs: [id],
+  //     );
+  //   } catch (e) {
+  //     // print(e);
+  //     return 0;
+  //   }
+  // }
+
+  static delete(Task task) async {
+    return await _database!
+        .delete(_tableName, where: 'id=?', whereArgs: [task.id]);
   }
 
   static updateTask(int id, bool isCompleted) async {

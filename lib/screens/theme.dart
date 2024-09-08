@@ -14,13 +14,13 @@ const Color orangeColor = Colors.deepOrangeAccent;
 
 class Themes {
   static final light = ThemeData(
-    dialogBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: Colors.white,
     primaryColor: primaryColor,
     brightness: Brightness.light,
   );
 
   static final dark = ThemeData(
-    dialogBackgroundColor: darkGreyColor,
+    scaffoldBackgroundColor: darkGreyColor,
     primaryColor: darkGreyColor,
     brightness: Brightness.dark,
   );
