@@ -1,6 +1,9 @@
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app/constants/date_bar_slider.dart';
 import 'package:todo_app/constants/task_bar.dart';
 import 'package:todo_app/controllers/task_controller.dart';
@@ -18,6 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime _selectedDate = DateTime.now();
   late NotifyHelper notifyHelper;
   final _taskController = Get.put(TaskController());
 
@@ -40,7 +44,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               TaskBar(),
               const SizedBox(height: 16),
-              DateBarSlider(),
+              // DateBarSlider(),
+              _showDateBar(),
               const SizedBox(height: 24),
               _showTasks(),
             ],
@@ -48,40 +53,477 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  _showTasks() {
-    return Obx(() {
-      return Expanded(
-        child: ListView.builder(
-            itemCount: _taskController.taskList.length,
-            // itemCount: 10,
-            shrinkWrap: true,
-            itemBuilder: (_, index) {
-              print(_taskController.taskList.length);
+  // _showTasks() {
+  //   return Obx(() {
+  //     return Expanded(
+  //       child: ListView.builder(
+  //           itemCount: _taskController.taskList.length,
+  //           // itemCount: 10,
+  //           shrinkWrap: true,
+  //           itemBuilder: (_, index) {
+  //             // print(_taskController.taskList.length);
+  //             Task task = _taskController.taskList[index];
+  //             // print(task.toJson());
 
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: AnimationConfiguration.staggeredList(
-                  position: index,
-                  child: SlideAnimation(
-                    child: FadeInAnimation(
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _showBottomSheet(
-                                  context, _taskController.taskList[index]);
-                            },
-                            child: TaskTile(_taskController.taskList[index]),
-                          )
-                        ],
-                      ),
+  //             if (task.repeat == 'Daily') {
+  //               DateTime date =
+  //                   DateFormat.jm().parse(task.startTime.toString());
+  //               var myTime = DateFormat("HH:mm").format(date);
+  //               // print(myTime);
+
+  //               notifyHelper.scheduledNotification(
+  //                 int.parse(myTime.toString().split(':')[0]),
+  //                 int.parse(myTime.toString().split(':')[1]),
+  //                 task,
+  //               );
+  //               return Padding(
+  //                 padding: const EdgeInsets.only(bottom: 10),
+  //                 child: AnimationConfiguration.staggeredList(
+  //                   position: index,
+  //                   child: SlideAnimation(
+  //                     child: FadeInAnimation(
+  //                       child: Row(
+  //                         children: [
+  //                           GestureDetector(
+  //                             onTap: () {
+  //                               _showBottomSheet(context, task);
+  //                             },
+  //                             child: TaskTile(task),
+  //                           )
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             }
+  //             if (task.date == DateFormat.yMd().format(_selectedDate)) {
+  //               return Padding(
+  //                 padding: const EdgeInsets.only(bottom: 10),
+  //                 child: AnimationConfiguration.staggeredList(
+  //                   position: index,
+  //                   child: SlideAnimation(
+  //                     child: FadeInAnimation(
+  //                       child: Row(
+  //                         children: [
+  //                           GestureDetector(
+  //                             onTap: () {
+  //                               _showBottomSheet(context, task);
+  //                             },
+  //                             child: TaskTile(task),
+  //                           )
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             } else {
+  //               return Container();
+  //             }
+  //           }),
+  //     );
+  //   });
+  // }
+
+  // _showTasks() {
+  //   return Obx(() {
+  //     return Expanded(
+  //       child: ListView.builder(
+  //         itemCount: _taskController.taskList.length,
+  //         shrinkWrap: true,
+  //         itemBuilder: (_, index) {
+  //           Task task = _taskController.taskList[index];
+
+  //           DateTime date = _parseDateTime(task.startTime.toString());
+  //           var myTime = DateFormat.Hm().format(date);
+
+  //           var remind = DateFormat.Hm()
+  //               .format(date.subtract(Duration(minutes: task.remind!)));
+
+  //           if (task.repeat == 'Daily') {
+  //             try {
+  //               notifyHelper.scheduledNotification(
+  //                 int.parse(myTime.toString().split(":")[0]), //hour
+  //                 int.parse(myTime.toString().split(":")[1]), //minute
+  //                 task,
+  //               );
+
+  //               return Padding(
+  //                 padding: const EdgeInsets.only(bottom: 10),
+  //                 child: AnimationConfiguration.staggeredList(
+  //                   position: index,
+  //                   child: SlideAnimation(
+  //                     child: FadeInAnimation(
+  //                       child: Row(
+  //                         children: [
+  //                           GestureDetector(
+  //                             onTap: () {
+  //                               _showBottomSheet(context, task);
+  //                             },
+  //                             child: TaskTile(task),
+  //                           )
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             } catch (e) {
+  //               print("Error parsing start time: $e");
+  //               return Container(); // Skip this task if there's an error
+  //             }
+  //           }
+
+  //           if (task.date == DateFormat('MM/dd/yyyy').format(_selectedDate)) {
+  //             notifyHelper.scheduledNotification(
+  //               int.parse(myTime.toString().split(":")[0]), //hour
+  //               int.parse(myTime.toString().split(":")[1]), //minute
+  //               task,
+  //             );
+
+  //             return Padding(
+  //               padding: const EdgeInsets.only(bottom: 10),
+  //               child: AnimationConfiguration.staggeredList(
+  //                 position: index,
+  //                 child: SlideAnimation(
+  //                   child: FadeInAnimation(
+  //                     child: Row(
+  //                       children: [
+  //                         GestureDetector(
+  //                           onTap: () {
+  //                             _showBottomSheet(context, task);
+  //                           },
+  //                           child: TaskTile(task),
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           } else {
+  //             return Container();
+  //           }
+  //         },
+  //       ),
+  //     );
+  //   });
+  // }
+
+  // _showTasks() {
+  //   return Expanded(
+  //     child: Obx(() {
+  //       return ListView.builder(
+  //         itemCount: _taskController.taskList.length,
+  //         itemBuilder: (_, index) {
+  //           Task task = _taskController.taskList[index];
+
+  //           DateTime date = _parseDateTime(task.startTime.toString());
+  //           var myTime = DateFormat.Hm().format(date);
+
+  //           var remind = DateFormat.Hm()
+  //               .format(date.subtract(Duration(minutes: task.remind!)));
+
+  //           if (task.repeat == "None" &&
+  //               task.date == DateFormat('MM/dd/yyyy').format(_selectedDate)) {
+  //             // Schedule notification if needed
+  //             notifyHelper.scheduledNotification(
+  //               int.parse(myTime.toString().split(":")[0]), // hour
+  //               int.parse(myTime.toString().split(":")[1]), // minute
+  //               task,
+  //             );
+
+  //             return AnimationConfiguration.staggeredList(
+  //               position: index,
+  //               child: SlideAnimation(
+  //                 child: FadeInAnimation(
+  //                   child: Row(
+  //                     children: [
+  //                       GestureDetector(
+  //                         onTap: () {
+  //                           _showBottomSheet(context, task);
+  //                         },
+  //                         child: TaskTile(task),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           }
+
+  //           if (task.repeat == "Daily") {
+  //             notifyHelper.scheduledNotification(
+  //               int.parse(myTime.toString().split(":")[0]), //hour
+  //               int.parse(myTime.toString().split(":")[1]), //minute
+  //               task,
+  //             );
+
+  //             // update if daily task is completed to reset it every 11:59 pm is not completed
+  //             if (DateTime.now().hour == 23 && DateTime.now().minute == 59) {
+  //               _taskController.markTaskAsCompleted(task.id!, false);
+  //             }
+
+  //             return AnimationConfiguration.staggeredList(
+  //               position: index,
+  //               child: SlideAnimation(
+  //                 child: FadeInAnimation(
+  //                   child: Row(
+  //                     children: [
+  //                       GestureDetector(
+  //                         onTap: () {
+  //                           _showBottomSheet(context, task);
+  //                         },
+  //                         child: TaskTile(task),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           } else if (task.date ==
+  //               DateFormat('MM/dd/yyyy').format(_selectedDate)) {
+  //             notifyHelper.scheduledNotification(
+  //               int.parse(myTime.toString().split(":")[0]), //hour
+  //               int.parse(myTime.toString().split(":")[1]), //minute
+  //               task,
+  //             );
+
+  //             return AnimationConfiguration.staggeredList(
+  //               position: index,
+  //               child: SlideAnimation(
+  //                 child: FadeInAnimation(
+  //                   child: Row(
+  //                     children: [
+  //                       GestureDetector(
+  //                         onTap: () {
+  //                           _showBottomSheet(context, task);
+  //                         },
+  //                         child: TaskTile(
+  //                           task,
+  //                         ),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           } else if (task.repeat == "Weekly" &&
+  //               DateFormat('EEEE').format(_selectedDate) ==
+  //                   DateFormat('EEEE').format(DateTime.now())) {
+  //             return AnimationConfiguration.staggeredList(
+  //               position: index,
+  //               child: SlideAnimation(
+  //                 child: FadeInAnimation(
+  //                   child: Row(
+  //                     children: [
+  //                       GestureDetector(
+  //                         onTap: () {
+  //                           _showBottomSheet(context, task);
+  //                         },
+  //                         child: TaskTile(task),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           } else if (task.repeat == "Monthly" &&
+  //               DateFormat('dd').format(_selectedDate) ==
+  //                   DateFormat('dd').format(DateTime.now())) {
+  //             return AnimationConfiguration.staggeredList(
+  //               position: index,
+  //               child: SlideAnimation(
+  //                 child: FadeInAnimation(
+  //                   child: Row(
+  //                     children: [
+  //                       GestureDetector(
+  //                         onTap: () {
+  //                           _showBottomSheet(context, task);
+  //                         },
+  //                         child: TaskTile(task),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           } else {
+  //             return Container();
+  //           }
+  //         },
+  //       );
+  //     }),
+  //   );
+  // }
+
+  _showTasks() {
+    return Expanded(
+      child: Obx(() {
+        return ListView.builder(
+          itemCount: _taskController.taskList.length,
+          itemBuilder: (_, index) {
+            Task task = _taskController.taskList[index];
+
+            DateTime date = _parseDateTime(task.startTime.toString());
+            var myTime = DateFormat.Hm().format(date);
+
+            var remind = DateFormat.Hm()
+                .format(date.subtract(Duration(minutes: task.remind!)));
+
+            // Handle the "None" repeat option
+            if (task.repeat == "None" &&
+                task.date == DateFormat('MM/dd/yyyy').format(_selectedDate)) {
+              // Schedule notification if needed
+              notifyHelper.scheduledNotification(
+                int.parse(myTime.toString().split(":")[0]), // hour
+                int.parse(myTime.toString().split(":")[1]), // minute
+                task,
+              );
+
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               );
-            }),
-      );
-    });
+            } else if (task.repeat == "Daily") {
+              notifyHelper.scheduledNotification(
+                int.parse(myTime.toString().split(":")[0]), // hour
+                int.parse(myTime.toString().split(":")[1]), // minute
+                task,
+              );
+
+              // Update if daily task is completed to reset it every 11:59 pm if not completed
+              if (DateTime.now().hour == 23 && DateTime.now().minute == 59) {
+                _taskController.markTaskAsCompleted(task.id!, false);
+              }
+
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else if (task.date ==
+                DateFormat('MM/dd/yyyy').format(_selectedDate)) {
+              notifyHelper.scheduledNotification(
+                int.parse(myTime.toString().split(":")[0]), // hour
+                int.parse(myTime.toString().split(":")[1]), // minute
+                task,
+              );
+
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else if (task.repeat == "Weekly" &&
+                DateFormat('EEEE').format(_selectedDate) ==
+                    DateFormat('EEEE').format(DateTime.now())) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else if (task.repeat == "Monthly" &&
+                DateFormat('dd').format(_selectedDate) ==
+                    DateFormat('dd').format(DateTime.now())) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return Container();
+            }
+          },
+        );
+      }),
+    );
+  }
+
+  DateTime _parseDateTime(String timeString) {
+    // Split the timeString into components (hour, minute, period)
+    List<String> components = timeString.split(' ');
+
+    // Extract and parse the hour and minute
+    List<String> timeComponents = components[0].split(':');
+    int hour = int.parse(timeComponents[0]);
+    int minute = int.parse(timeComponents[1]);
+
+    // If the time string contains a period (AM or PM),
+    //adjust the hour for 12-hour format
+    if (components.length > 1) {
+      String period = components[1];
+      if (period.toLowerCase() == 'pm' && hour < 12) {
+        hour += 12;
+      } else if (period.toLowerCase() == 'am' && hour == 12) {
+        hour = 0;
+      }
+    }
+
+    return DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, hour, minute);
   }
 
   _showBottomSheet(BuildContext context, Task task) {
@@ -108,6 +550,7 @@ class _HomePageState extends State<HomePage> {
               : _bottomSheetButton(
                   label: 'Task Completed',
                   onTap: () {
+                    _taskController.markTaskAsCompleted(task.id!, false);
                     Get.back();
                   },
                   color: primaryColor,
@@ -116,6 +559,8 @@ class _HomePageState extends State<HomePage> {
           _bottomSheetButton(
             label: 'Delete Task',
             onTap: () {
+              _taskController.deleteTask(task.id!);
+
               Get.back();
             },
             color: Colors.red[300]!,
@@ -172,6 +617,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _showDateBar() {
+    return SizedBox(
+      child: DatePicker(
+        DateTime.now(),
+        height: 100,
+        width: 80,
+        initialSelectedDate: DateTime.now(),
+        selectionColor: primaryColor,
+        selectedTextColor: Colors.white,
+        dateTextStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          ),
+        ),
+        dayTextStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          ),
+        ),
+        monthTextStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          ),
+        ),
+        onDateChange: (date) {
+          setState(() {
+            _selectedDate = date;
+          });
+        },
+      ),
+    );
+  }
+
   _appBar() {
     return AppBar(
       backgroundColor: context.theme.dialogBackgroundColor,
@@ -184,7 +668,7 @@ class _HomePageState extends State<HomePage> {
                 ? 'Activated Light Theme'
                 : 'Activated Dark Theme',
           );
-          notifyHelper.scheduledNotification();
+          // notifyHelper.scheduledNotification();
         },
         child: Icon(
           Get.isDarkMode ? Icons.wb_sunny_outlined : Icons.nightlight_outlined,

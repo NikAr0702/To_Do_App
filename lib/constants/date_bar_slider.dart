@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app/screens/theme.dart';
 
-class DateBarSlider extends StatelessWidget {
-  DateTime _selectedDate = DateTime.now();
+class DateBarSlider extends StatefulWidget {
   DateBarSlider({super.key});
+
+  @override
+  State<DateBarSlider> createState() => _DateBarSliderState();
+}
+
+class _DateBarSliderState extends State<DateBarSlider> {
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +45,9 @@ class DateBarSlider extends StatelessWidget {
           ),
         ),
         onDateChange: (date) {
-          _selectedDate = date;
+          setState(() {
+            _selectedDate = date;
+          });
         },
       ),
     );

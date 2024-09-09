@@ -95,7 +95,7 @@ class TaskTile extends StatelessWidget {
             child: Row(
               children: [
                 task!.isCompleted == 1
-                    ? const Icon(Icons.done_rounded)
+                    ? const Icon(Icons.done_rounded, color: Colors.white)
                     : Container(),
                 Text(
                   task!.isCompleted == 1 ? "COMPLETED" : "TODO",
