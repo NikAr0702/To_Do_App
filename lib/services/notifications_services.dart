@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:todo_app/models/task_model.dart';
+import 'package:todo_app/screens/notified_page.dart';
 
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -62,7 +63,7 @@ class NotifyHelper {
       title,
       body,
       platformChannelSpecifics,
-      payload: 'Theme change',
+      payload: title,
     );
   }
 
@@ -85,7 +86,6 @@ class NotifyHelper {
   //   );
   // }
   Future<void> scheduledNotification(int hour, int minutes, Task task) async {
-    // Future<void> scheduledNotification(int hour, int minutes, Task task) async {
     String msg;
     msg = "🔴Now your task starting⏰.";
 
@@ -95,7 +95,7 @@ class NotifyHelper {
       task.id!.toInt(),
       "🔴${task.title}",
       task.note,
-      scheduledDate,
+      _convertTime(hour, minutes),
       NotificationDetails(
         android: AndroidNotificationDetails(
           'your channel id',
@@ -104,7 +104,7 @@ class NotifyHelper {
           importance: Importance.max,
           priority: Priority.high,
           showWhen: false,
-          playSound: true,
+          playSound: false,
           icon: 'app_icon',
           // sound: const RawResourceAndroidNotificationSound('mixkit_urgen_loop'),
           // largeIcon: const DrawableResourceAndroidBitmap('app_icon'),
@@ -118,18 +118,6 @@ class NotifyHelper {
       payload: "${task.title}|${task.note}|${task.startTime}|",
     );
   }
-
-  // tz.TZDateTime _convertTime(int hour, int minutes) {
-  //   final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-  //   tz.TZDateTime scheduleDate =
-  //       tz.TZDateTime(tz.local, now.year, now.month, now.day, minutes);
-
-  //   if (scheduleDate.isBefore(now)) {
-  //     scheduleDate = scheduleDate.add(const Duration(days: 1));
-  //   }
-
-  //   return scheduleDate;
-  // }
 
   tz.TZDateTime _convertTime(int hour, int minutes) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
@@ -166,7 +154,8 @@ class NotifyHelper {
     } else {
       print('Notification Done');
     }
-    Get.to(() => Container(color: Colors.white));
+
+    Get.to(() => NotifiedPage(label: payload));
   }
 
   Future<void> onDidReceiveLocalNotification(
