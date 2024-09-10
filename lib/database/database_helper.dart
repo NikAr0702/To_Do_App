@@ -18,31 +18,30 @@
 //         path,
 //         version: _version,
 //         onCreate: (db, version) {
-//           print('Creating table name ->  $_tableName');
+//           // print('Creating table name ->  $_tableName');
 //           return db.execute(
 //             'CREATE TABLE $_tableName (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, note TEXT, date STRING, startTime STRING, endTime STRING, remind INTEGER, repeat STRING, color INTEGER, isCompleted INTEGER, completedAt STRING, createdAt STRING, updatedAt STRING)',
 //           );
 //         },
 //       );
 //     } catch (e) {
-//       print(e);
+//       // print(e);
 //     }
 //   }
 
-//   static Future<int> insert(Task? task) async {
-//     print('INSERT FUNCTION CALLED');
-//     print('Inserting data to $_tableName');
+//   static Future<int> insert(Task task) async {
+//     // print('Inserting data to $_tableName');
 //     try {
-//       print(task!.toJson());
-//       return await _database?.insert(_tableName, task.toJson()) ?? 1;
+//       // print(task.toJson());
+//       return await _database!.insert(_tableName, task.toJson());
 //     } catch (e) {
-//       print(e);
+//       // print(e);
 //       return 0;
 //     }
 //   }
 
 //   static Future<List<Map<String, dynamic>>> query() async {
-//     print('Querying data from $_tableName ');
+//     // print('Querying data from $_tableName ');
 //     try {
 //       return await _database!.query(_tableName);
 //     } catch (e) {
@@ -51,46 +50,34 @@
 //     }
 //   }
 
-//   // static Future<int> delete(int id) async {
-//   //   // print('Deleting data from $_tableName with id ===> $id');
-//   //   try {
-//   //     return await _database!.delete(
-//   //       _tableName,
-//   //       where: 'id = ?',
-//   //       whereArgs: [id],
-//   //     );
-//   //   } catch (e) {
-//   //     // print(e);
-//   //     return 0;
-//   //   }
-//   // }
-
-//   static delete(Task task) async {
-//     return await _database!
-//         .delete(_tableName, where: 'id=?', whereArgs: [task.id]);
+//   static Future<int> delete(int id) async {
+//     // print('Deleting data from $_tableName with id ===> $id');
+//     try {
+//       return await _database!.delete(
+//         _tableName,
+//         where: 'id = ?',
+//         whereArgs: [id],
+//       );
+//     } catch (e) {
+//       // print(e);
+//       return 0;
+//     }
 //   }
 
-//   // static updateTask(int id, bool isCompleted) async {
-//   //   // print('Updating data from $_tableName with id ===> $id');
+//   static updateTask(int id, bool isCompleted) async {
+//     // print('Updating data from $_tableName with id ===> $id');
 
-//   //   int isComplete = isCompleted ? 1 : 0;
-//   //   try {
-//   //     return await _database!.rawUpdate('''
-//   //     UPDATE $_tableName
-//   //     SET isCompleted = ?, completedAt = ?
-//   //     WHERE id = ?
-//   //   ''', [isComplete, DateTime.now().toIso8601String(), id]);
-//   //   } catch (e) {
-//   //     // print(e);
-//   //     return 0;
-//   //   }
-//   // }
-
-//   static update(int id) async {
-//     await _database?.rawUpdate('''
-//      UPDATE TASKS
-//      SET isCompleted = ?
-//      WHERE id = ?''', [1, id]);
+//     int isComplete = isCompleted ? 1 : 0;
+//     try {
+//       return await _database!.rawUpdate('''
+//       UPDATE $_tableName
+//       SET isCompleted = ?, completedAt = ?
+//       WHERE id = ?
+//     ''', [isComplete, DateTime.now().toIso8601String(), id]);
+//     } catch (e) {
+//       // print(e);
+//       return 0;
+//     }
 //   }
 
 //   static Future<int> updateTaskInfo(Task task) async {
