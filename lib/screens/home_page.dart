@@ -97,32 +97,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // _appBar() {
-  //   return AppBar(
-  //     backgroundColor: context.theme.dialogBackgroundColor,
-  //     leading: GestureDetector(
-  //       onTap: () {
-  //         ThemeService().switchTheme();
-  //         notifyHelper.displayNotification(
-  //           title: 'Theme Changed',
-  //           body: Get.isDarkMode
-  //               ? 'Activated Light Theme'
-  //               : 'Activated Dark Theme',
-  //         );
-  //       },
-  //       child: Icon(
-  //         Get.isDarkMode ? Icons.wb_sunny_outlined : Icons.nightlight_outlined,
-  //         size: 20,
-  //         color: Get.isDarkMode ? Colors.white : Colors.black,
-  //       ),
-  //     ),
-  //     actions: const [
-  //       Icon(Icons.person, size: 20),
-  //       SizedBox(width: 20),
-  //     ],
-  //   );
-  // }
-
   _appBar() {
     return AppBar(
       backgroundColor: context.theme.dialogBackgroundColor,
@@ -241,100 +215,6 @@ class _HomePageState extends State<HomePage> {
       return taskTitleLower.contains(searchLower);
     }).toList();
   }
-
-  // _showTasks() {
-  //   return Expanded(
-  //     child: Obx(
-  //       () {
-  //         // Get task list from the controller
-  //         List<Task> tasks = _taskController.taskList;
-
-  //         // Apply search filter if a search query is present
-  //         if (_searchQuery.isNotEmpty) {
-  //           tasks = tasks
-  //               .where((task) =>
-  //                   task.title
-  //                       .toLowerCase()
-  //                       .contains(_searchQuery.toLowerCase()) ||
-  //                   task.note
-  //                       .toLowerCase()
-  //                       .contains(_searchQuery.toLowerCase()))
-  //               .toList();
-  //         }
-
-  //         // Return ListView of tasks
-  //         return ListView.builder(
-  //           itemCount: tasks.length,
-  //           itemBuilder: (context, index) {
-  //             Task task = tasks[index];
-
-  //             // Parse task time
-  //             DateTime date = _parseDateTime(task.startTime.toString());
-  //             var myTime = DateFormat.Hm().format(date);
-  //             var remind = DateFormat.Hm()
-  //                 .format(date.subtract(Duration(minutes: task.remind!)));
-
-  //             int mainTaskNotificationId = task.id!.toInt();
-  //             int reminderNotificationId = mainTaskNotificationId + 1;
-
-  //             // Parse hour and minute from myTime and remind time
-  //             int myTimeHour = int.parse(myTime.split(":")[0]);
-  //             int myTimeMinute = int.parse(myTime.split(":")[1]);
-  //             int remindHour = int.parse(remind.split(":")[0]);
-  //             int remindMinute = int.parse(remind.split(":")[1]);
-
-  //             if (task.repeat == "Daily") {
-  //               // Handle notifications
-  //               if (task.remind! > 4) {
-  //                 notifyHelper.remindNotification(
-  //                   remindHour, // hour
-  //                   remindMinute, // minute
-  //                   task,
-  //                 );
-  //                 notifyHelper.cancelNotification(reminderNotificationId);
-  //               }
-
-  //               notifyHelper.scheduledNotification(
-  //                 myTimeHour, // hour
-  //                 myTimeMinute, // minute
-  //                 task,
-  //               );
-  //               notifyHelper.cancelNotification(reminderNotificationId);
-
-  //               // Mark task as completed at 23:59
-  //               if (DateTime.now().hour == 23 && DateTime.now().minute == 59) {
-  //                 _taskController.markTaskAsCompleted(task.id!, false);
-  //               }
-  //             }
-
-  //             // Show task using animation
-  //             return AnimationConfiguration.staggeredList(
-  //               position: index,
-  //               child: SlideAnimation(
-  //                 child: FadeInAnimation(
-  //                   child: Row(
-  //                     children: [
-  //                       GestureDetector(
-  //                         onTap: () {
-  //                           _showBottomSheet(context, task);
-  //                         },
-  //                         onLongPress: () {
-  //                           HapticFeedback.mediumImpact();
-  //                           Get.to(() => AddTaskBarPage(task: task));
-  //                         },
-  //                         child: TaskTile(task),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 
   _showTasks() {
     return Expanded(

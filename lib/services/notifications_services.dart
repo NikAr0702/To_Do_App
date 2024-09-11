@@ -88,16 +88,13 @@ class NotifyHelper {
         );
   }
 
-// Request Permissions for Android
   Future<void> requestAndroidPermissions() async {
     // Request the required permissions
     Map<Permission, PermissionStatus> statuses = await [
       Permission.notification,
       Permission.scheduleExactAlarm,
-      // Add other permissions as needed
     ].request();
 
-    // Check if the permissions are granted
     if (statuses[Permission.notification] == PermissionStatus.granted &&
         statuses[Permission.scheduleExactAlarm] == PermissionStatus.granted) {
     } else {
@@ -105,7 +102,6 @@ class NotifyHelper {
           "Please allow Notification permission from settings",
           backgroundColor: Colors.redAccent, colorText: Colors.white);
 
-      // If permissions are denied, we cannot continue the app
       await [
         Permission.notification,
         Permission.scheduleExactAlarm,
@@ -115,7 +111,6 @@ class NotifyHelper {
 
   Future<bool> requestScheduleExactAlarmPermission() async {
     if (await Permission.scheduleExactAlarm.request().isGranted) {
-      // Either the permission was already granted before or the user just granted it.
       return true;
     } else {
       await Permission.scheduleExactAlarm.isDenied.then((value) {
@@ -160,13 +155,13 @@ class NotifyHelper {
   Future<void> scheduledNotification(int hour, int minutes, Task task) async {
     // Future<void> scheduledNotification(int hour, int minutes, Task task) async {
     String msg;
-    msg = "🔴Now your task starting⏰.";
+    msg = "🔴 Now your task starting⏰.";
 
     tz.TZDateTime scheduledDate = await _convertTime(hour, minutes);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       task.id!.toInt(),
-      "🔴${task.title}",
+      "🔴 ${task.title}",
       task.note,
       scheduledDate,
       NotificationDetails(
@@ -180,7 +175,6 @@ class NotifyHelper {
           playSound: true,
           icon: 'app_icon',
           sound: const RawResourceAndroidNotificationSound(''),
-          // largeIcon: const DrawableResourceAndroidBitmap('app_icon'),
           subText: msg,
         ),
       ),
@@ -198,7 +192,7 @@ class NotifyHelper {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       task.id!.toInt() + 1,
       "⚠️ Don't forget to complete your task.",
-      "At ${task.startTime}🔴${task.title}",
+      "At ${task.startTime} 🔴 ${task.title}",
       scheduledDate,
       NotificationDetails(
         android: AndroidNotificationDetails(
@@ -251,7 +245,7 @@ class NotifyHelper {
       tz.setLocalLocation(tz.getLocation(timeZone));
     } catch (e) {
       // If the location is not found, set a default location
-      tz.setLocalLocation(tz.getLocation('Asia/Kathmandu'));
+      tz.setLocalLocation(tz.getLocation('Asia/Delhi'));
     }
   }
 }

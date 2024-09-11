@@ -18,7 +18,7 @@ class NotifiedPage extends StatelessWidget {
             )),
         title: Text(
           label.toString().split("|")[0],
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
       ),
       body: Center(
