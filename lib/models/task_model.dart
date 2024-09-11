@@ -17,7 +17,7 @@ class Task {
     this.id,
     required this.title,
     required this.note,
-    this.isCompleted,
+    this.isCompleted = 0, // Default to not completed
     this.date,
     this.startTime,
     this.endTime,
@@ -61,5 +61,33 @@ class Task {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;
+  }
+
+  // Method to mark the task as completed
+  void markAsCompleted() {
+    isCompleted = 1;
+    completedAt = DateTime.now().toIso8601String();
+  }
+
+  // Method to update task details
+  void updateTask({
+    String? newTitle,
+    String? newNote,
+    String? newDate,
+    String? newStartTime,
+    String? newEndTime,
+    int? newColor,
+    int? newRemind,
+    String? newRepeat,
+  }) {
+    title = newTitle ?? title;
+    note = newNote ?? note;
+    date = newDate ?? date;
+    startTime = newStartTime ?? startTime;
+    endTime = newEndTime ?? endTime;
+    color = newColor ?? color;
+    remind = newRemind ?? remind;
+    repeat = newRepeat ?? repeat;
+    updatedAt = DateTime.now().toIso8601String();
   }
 }
