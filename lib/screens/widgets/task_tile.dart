@@ -51,26 +51,51 @@ class TaskTile extends StatelessWidget {
                             TextStyle(fontSize: 13, color: Colors.grey[100]),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Chip(
-                      label: Text(
-                        "${task!.repeat}",
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[100],
+                    const SizedBox(width: 8),
+                    Row(
+                      children: [
+                        Chip(
+                          label: Text(
+                            "${task!.repeat}",
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[100],
+                              ),
+                            ),
+                          ),
+                          backgroundColor: _getBGClr(task!.color ?? 0),
+                          clipBehavior: Clip.antiAlias,
+                          shadowColor: Colors.white,
+                          padding: const EdgeInsets.only(
+                            top: 0,
+                            bottom: 0,
+                            left: 1,
+                            right: 1,
                           ),
                         ),
-                      ),
-                      backgroundColor: _getBGClr(task!.color ?? 0),
-                      clipBehavior: Clip.antiAlias,
-                      shadowColor: Colors.grey,
-                      padding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 0,
-                        left: 4,
-                        right: 4,
-                      ),
+                        const SizedBox(width: 8),
+                        Chip(
+                          label: Text(
+                            "${task!.priority}",
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[100],
+                              ),
+                            ),
+                          ),
+                          backgroundColor: _getBGClr(task!.color ?? 0),
+                          clipBehavior: Clip.antiAlias,
+                          shadowColor: Colors.white,
+                          padding: const EdgeInsets.only(
+                            top: 0,
+                            bottom: 0,
+                            left: 1,
+                            right: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

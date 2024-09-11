@@ -38,6 +38,9 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
 
+  String _selectedPriority = "None";
+  List<String> priorityList = ["None", "High", "Medium", "Low"];
+
   int _selectedColor = 0;
 
   @override
@@ -52,6 +55,7 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
       _endTime = widget.task!.endTime!;
       _selectedRemind = widget.task!.remind!;
       _selectedRepeat = widget.task!.repeat!;
+      _selectedPriority = widget.task!.priority!;
       _selectedColor = widget.task!.color!;
     }
   }
@@ -59,7 +63,7 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.theme.colorScheme.background,
+      backgroundColor: context.theme.colorScheme.surface,
       appBar: _appBar(context),
       body: Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -81,7 +85,7 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
       systemOverlayStyle: Get.isDarkMode
           ? SystemUiOverlayStyle.light
           : SystemUiOverlayStyle.dark,
-      backgroundColor: context.theme.colorScheme.background,
+      backgroundColor: context.theme.colorScheme.surface,
       elevation: 0,
       leading: GestureDetector(
         onTap: () {
@@ -292,6 +296,39 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
               }).toList(),
             ),
           ),
+          const SizedBox(height: 12),
+          MyInputTextField(
+            title: "Priority",
+            hint: _selectedPriority,
+            widget: DropdownButton(
+              icon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.grey,
+              ),
+              iconSize: 32,
+              elevation: 4,
+              padding: const EdgeInsets.only(right: 5),
+              style: subTitleStyle,
+              underline: Container(
+                height: 0,
+                color: Colors.transparent,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedPriority = newValue!;
+                });
+              },
+              items: priorityList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: subTitleStyle,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -320,13 +357,13 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
         "Required",
         "All field is required!",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.isDarkMode ? Colors.white : Colors.grey,
+        backgroundColor: primaryColor,
         icon: const Icon(
           Icons.warning_amber_rounded,
-          color: Colors.red,
+          color: Colors.white,
           size: 35,
         ),
-        colorText: Colors.red,
+        colorText: Colors.white,
       );
     }
   }
@@ -381,6 +418,7 @@ class _AddTaskPageState extends State<AddTaskBarPage> {
       startTime: _startTime,
       endTime: _endTime,
       remind: _selectedRemind,
+      priority: _selectedPriority,
       repeat: _selectedRepeat,
       color: _selectedColor,
       isCompleted: widget.task?.isCompleted ?? 0,

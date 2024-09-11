@@ -38,6 +38,7 @@ class TaskBar extends StatelessWidget {
           onTap: () async {
             await Get.to(() => const AddTaskBarPage());
             _taskController.getTasks();
+            print('_taskController.getTasks();');
           },
         )
       ],

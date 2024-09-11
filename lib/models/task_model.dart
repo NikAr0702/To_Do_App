@@ -9,6 +9,7 @@ class Task {
   int? color;
   int? remind;
   String? repeat;
+  String? priority;
   String? completedAt;
   String? createdAt;
   String? updatedAt;
@@ -24,6 +25,7 @@ class Task {
     this.color,
     this.remind,
     this.repeat,
+    this.priority,
     this.completedAt,
     this.createdAt,
     this.updatedAt,
@@ -39,6 +41,7 @@ class Task {
     endTime = json['endTime'];
     color = json['color'];
     remind = json['remind'];
+    priority = json['priority'];
     repeat = json['repeat'];
     completedAt = json['completedAt'];
     createdAt = json['createdAt'];
@@ -56,6 +59,7 @@ class Task {
     data['endTime'] = endTime;
     data['color'] = color;
     data['remind'] = remind;
+    data['priority'] = priority;
     data['repeat'] = repeat;
     data['completedAt'] = completedAt;
     data['createdAt'] = createdAt;
@@ -79,6 +83,7 @@ class Task {
     int? newColor,
     int? newRemind,
     String? newRepeat,
+    String? newPriority,
   }) {
     title = newTitle ?? title;
     note = newNote ?? note;
@@ -88,6 +93,7 @@ class Task {
     color = newColor ?? color;
     remind = newRemind ?? remind;
     repeat = newRepeat ?? repeat;
+    priority = newPriority ?? priority;
     updatedAt = DateTime.now().toIso8601String();
   }
 }
