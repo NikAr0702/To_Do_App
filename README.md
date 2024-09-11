@@ -21,6 +21,8 @@ Utilized to separate concerns and maintain a clean codebase
 
 **Controllers:** Manage the flow of data between models and views.
 
+## **Implementation Details**
+
 **State Management:** Utilized GetX for efficient state management, ensuring smooth UI updates and consistent state handling across the application.
 
 **Database Management:** Implemented sqflite for robust local database operations, including task insertion, querying, updating, and deletion.
