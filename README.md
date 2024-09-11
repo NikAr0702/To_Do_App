@@ -12,7 +12,9 @@ This project is a starting point for a Flutter application.
 **Purpose:** A feature-rich to-do application designed to manage tasks efficiently with capabilities for task prioritization, notifications, and a dynamic search feature.
 
 
-## **MVC Architecture:** Utilized to separate concerns and maintain a clean codebase:
+## **MVC Architecture:** 
+Utilized to separate concerns and maintain a clean codebase
+
 **Models:** Define the structure of data and business logic.
 
 **Views (UI):** Handle the presentation of data and user interactions.
